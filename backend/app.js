@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import productRouter from "./routes/productRoute.js";
 import errorMiddleware from "./middleware/error.js";
+import userRouter from "./routes/userRoute.js";
+import bodyParser from "body-parser";
 
 const app = express();
 
@@ -10,12 +12,20 @@ dotenv.config();
 app.use(express.json());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(bodyParser.json({ limit: "30mb", extended: true }));
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+
 
 //All the routes
 app.use("/", productRouter);
+app.use("/", userRouter);
+
 
 //middleware for error
 app.use(errorMiddleware);
+
+
+
 
 //Connecting to mongodb and listening to server
 (async () => {

@@ -6,7 +6,7 @@ import ApiFeatures from "../utils/apiFeatures.js";
 //Create Product -- Admin
 export const createProduct = asyncErrorHandler(async (req, res, next) => {
   const product = await Product.create(req.body);
-
+  req.body.user = req.user.id;
   res
     .status(200)
     .json({ message: "Product created successfully", product: product });

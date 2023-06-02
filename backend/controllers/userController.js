@@ -2,10 +2,7 @@ import ErrorHandler from "../utils/errorHandler.js";
 import { asyncErrorHandler } from "../middleware/catchAsynError.js";
 import User from "../models/userModel.js";
 import sendToken from "../utils/jwtToken.js";
-import sendEmail from "../utils/sendEmail.js"
-
-
-
+import sendEmail from "../utils/sendEmail.js";
 
 export const registerUser = asyncErrorHandler(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -54,14 +51,13 @@ export const logout = asyncErrorHandler(async (req, res, next) => {
 });
 
 export const forgotPassword = asyncErrorHandler(async (req, res, next) => {
-  console.log(req.body.email)
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
     return next(new ErrorHandler("User not found", 404));
   }
-  console.log(user)
+
   const resetToken = user.getResetPasswordToken();
-  console.log(resetToken)
+
   await user.save({ validateBeforeSave: false });
 
   const resetPasswordUrl = `${req.protocol}://${req.get(
@@ -72,7 +68,7 @@ export const forgotPassword = asyncErrorHandler(async (req, res, next) => {
 
   try {
     await sendEmail({
-      email: email.user,
+      email: user.email,
       subject: "Ecommerce Password Reset",
       message: message,
     });
@@ -89,4 +85,113 @@ export const forgotPassword = asyncErrorHandler(async (req, res, next) => {
 
     return next(new ErrorHandler(err.message, 500));
   }
+});
+
+export const getUserDetails = asyncErrorHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  res.status(200).json({ success: true, user });
+});
+
+export const updatePassword = asyncErrorHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select("+password");
+
+  const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
+  console.log(isPasswordMatched);
+  if (!isPasswordMatched) {
+    console.log("inside");
+    return next(new ErrorHandler("old password is incorrect", 401));
+  }
+
+  if (req.body.newPassword !== req.body.confirmPassword) {
+    console.log("inside");
+    return next(new ErrorHandler("Password does not match", 401));
+  }
+
+  user.password = req.body.newPassword;
+
+  await user.save();
+
+  sendToken(user, 2000, res);
+});
+
+//update profile
+export const updateProfile = asyncErrorHandler(async (req, res, next) => {
+  const newUserData = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
+  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+  if(!user){
+    return next(new ErrorHandler("User does not exist", 404));
+  }
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+export const getAllUser = asyncErrorHandler(async (req, res, next) => {
+  const users = await User.find();
+
+  res.status(200).json({
+    success: true,
+    users,
+  });
+});
+
+//get Single user
+export const getSingleUser = asyncErrorHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new ErrorHandler("User does not exist", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+
+export const updateRole = asyncErrorHandler(async (req, res, next) => {
+  const newUserData = {
+    name: req.body.name,
+    email: req.body.email,
+    role:req.body.role
+  };
+
+  const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+  if(!user){
+    return next(new ErrorHandler("User does not exist", 404));
+  }
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+
+//Delete User --ADMIN
+
+export const deleteUser = asyncErrorHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new ErrorHandler("User does not exist", 404));
+  }
+
+  await user.deleteOne();
+  res.status(200).json({
+    success:true
+  })
 });

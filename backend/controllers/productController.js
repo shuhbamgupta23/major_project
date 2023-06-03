@@ -13,7 +13,7 @@ export const createProduct = asyncErrorHandler(async (req, res, next) => {
 });
 
 //get All products
-export const getAllProducts = asyncErrorHandler(async (req, res, next) => {
+export const getAllProducts = asyncErrorHandler(async (req, res) => {
   const resultPerPage = 5;
   const productCount = await Product.countDocuments();
   const apiFeatures = new ApiFeatures(Product.find(), req.query)
@@ -68,7 +68,7 @@ export const getProductDetails = asyncErrorHandler(async (req, res, next) => {
   res.status(200).json({ success: true, product });
 });
 
-export const createProductReview = asyncErrorHandler(async (req, res, next) => {
+export const createProductReview = asyncErrorHandler(async (req, res) => {
   const { rating, comment, productId } = req.body;
   const review = {
     user: req.user._id,

@@ -1,9 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import productRouter from "./routes/productRoute.js";
 import errorMiddleware from "./middleware/error.js";
+import productRouter from "./routes/productRoute.js";
 import userRouter from "./routes/userRoute.js";
+import orderRouter from "./routes/orderRoute.js";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
@@ -20,7 +21,7 @@ app.use(cookieParser());
 //All the routes
 app.use("/", productRouter);
 app.use("/", userRouter);
-
+app.use("/", orderRouter);
 //middleware for error
 app.use(errorMiddleware);
 

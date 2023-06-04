@@ -3,8 +3,17 @@ import { asyncErrorHandler } from "../middleware/catchAsynError.js";
 import User from "../models/userModel.js";
 import sendToken from "../utils/jwtToken.js";
 import sendEmail from "../utils/sendEmail.js";
+import cloudinary from "cloudinary";
 
 export const registerUser = asyncErrorHandler(async (req, res, next) => {
+  console.log("Working")
+  console.log(req.body)
+  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    folder: "avatars",
+    width: 150,
+    crop: "scale",
+  });
+  console.log(req.body);
   const { name, email, password } = req.body;
   const user = await User.create({
     name,
@@ -12,9 +21,10 @@ export const registerUser = asyncErrorHandler(async (req, res, next) => {
     password,
     avatar: {
       public_id: "This is sample id",
-      url: "prodfilepicid",
+      url: myCloud.secure_url,
     },
   });
+
 
   sendToken(user, 201, res);
 });
@@ -127,7 +137,7 @@ export const updateProfile = asyncErrorHandler(async (req, res, next) => {
     runValidators: true,
     useFindAndModify: false,
   });
-  if(!user){
+  if (!user) {
     return next(new ErrorHandler("User does not exist", 404));
   }
   res.status(200).json({
@@ -158,12 +168,11 @@ export const getSingleUser = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
-
 export const updateRole = asyncErrorHandler(async (req, res, next) => {
   const newUserData = {
     name: req.body.name,
     email: req.body.email,
-    role:req.body.role
+    role: req.body.role,
   };
 
   const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
@@ -171,7 +180,7 @@ export const updateRole = asyncErrorHandler(async (req, res, next) => {
     runValidators: true,
     useFindAndModify: false,
   });
-  if(!user){
+  if (!user) {
     return next(new ErrorHandler("User does not exist", 404));
   }
   res.status(200).json({
@@ -179,7 +188,6 @@ export const updateRole = asyncErrorHandler(async (req, res, next) => {
     user,
   });
 });
-
 
 //Delete User --ADMIN
 
@@ -192,6 +200,6 @@ export const deleteUser = asyncErrorHandler(async (req, res, next) => {
 
   await user.deleteOne();
   res.status(200).json({
-    success:true
-  })
+    success: true,
+  });
 });

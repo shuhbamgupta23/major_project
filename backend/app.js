@@ -7,6 +7,9 @@ import userRouter from "./routes/userRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import cloudinary from "cloudinary";
+import fileUpload from "express-fileupload"
+
 
 const app = express();
 
@@ -25,18 +28,27 @@ app.use("/", orderRouter);
 //middleware for error
 app.use(errorMiddleware);
 
-//Connecting to mongodb and listening to server
-(async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URL);
-    app.listen(process.env.PORT, () => {
-      console.log(
-        `Connected to MongoDB and listening on PORT ${process.env.PORT}`
-      );
-    });
-  } catch (err) {
-    console.log(err, "errr");
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_KEY_SECRET,
+});
+//
+
+(
+  //Connecting to mongodb and listening to server
+  async () => {
+    try {
+      await mongoose.connect(process.env.MONGODB_URL);
+      app.listen(process.env.PORT, () => {
+        console.log(
+          `Connected to MongoDB and listening on PORT ${process.env.PORT}`
+        );
+      });
+    } catch (err) {
+      console.log(err, "errr");
+    }
   }
-})();
+)();
 
 export default app;

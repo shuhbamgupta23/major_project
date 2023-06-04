@@ -5,23 +5,23 @@ import ApiFeatures from "../utils/apiFeatures.js";
 
 //Create Product -- Admin
 export const createProduct = asyncErrorHandler(async (req, res, next) => {
+  req.body.user = req.user._id;
   const product = await Product.create(req.body);
-  req.body.user = req.user.id;
   res
     .status(200)
     .json({ message: "Product created successfully", product: product });
 });
 
 //get All products
-export const getAllProducts = asyncErrorHandler(async (req, res) => {
-  const resultPerPage = 5;
-  const productCount = await Product.countDocuments();
+export const getAllProducts = asyncErrorHandler(async (req, res, next) => {
+  const resultPerPage = 8;
+  const productsCount = await Product.countDocuments();
   const apiFeatures = new ApiFeatures(Product.find(), req.query)
     .search()
     .filter()
     .pagination(resultPerPage);
   const products = await apiFeatures.query;
-  res.status(200).json({ success: true, products, productCount });
+  res.status(200).json({ success: true, products, productsCount,resultPerPage });
 });
 
 //update Product -- Admin

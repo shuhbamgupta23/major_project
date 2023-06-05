@@ -8,8 +8,8 @@ import orderRouter from "./routes/orderRoute.js";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cloudinary from "cloudinary";
-import fileUpload from "express-fileupload"
-
+import fileUpload from "express-fileupload";
+import paymentRouter from "./routes/paymentRoute.js";
 
 const app = express();
 
@@ -20,11 +20,12 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cookieParser());
-
+app.use(fileUpload());
 //All the routes
 app.use("/", productRouter);
 app.use("/", userRouter);
 app.use("/", orderRouter);
+app.use("/", paymentRouter);
 //middleware for error
 app.use(errorMiddleware);
 
@@ -35,20 +36,18 @@ cloudinary.v2.config({
 });
 //
 
-(
-  //Connecting to mongodb and listening to server
-  async () => {
-    try {
-      await mongoose.connect(process.env.MONGODB_URL);
-      app.listen(process.env.PORT, () => {
-        console.log(
-          `Connected to MongoDB and listening on PORT ${process.env.PORT}`
-        );
-      });
-    } catch (err) {
-      console.log(err, "errr");
-    }
+//Connecting to mongodb and listening to server
+(async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URL);
+    app.listen(process.env.PORT, () => {
+      console.log(
+        `Connected to MongoDB and listening on PORT ${process.env.PORT}`
+      );
+    });
+  } catch (err) {
+    console.log(err, "errr");
   }
-)();
+})();
 
 export default app;

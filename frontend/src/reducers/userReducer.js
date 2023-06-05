@@ -10,6 +10,7 @@ import {
   LOAD_USER_SUCCESS,
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
+
   CLEAR_ERRORS,
 } from "../constants/userContants";
 
@@ -31,12 +32,12 @@ export const userReducer = (state = { user: {} }, action) => {
         isAuthenticated: true,
         user: action.payload,
       };
-      case LOGOUT_SUCCESS:
-        return{
-        loading:false,
-        user:null,
-        isAuthenticated: false
-      }
+    case LOGOUT_SUCCESS:
+      return {
+        loading: false,
+        user: null,
+        isAuthenticated: false,
+      };
     case LOGIN_FAIL:
     case REGISTER_USER_FAIL:
       return {
@@ -55,12 +56,12 @@ export const userReducer = (state = { user: {} }, action) => {
       };
     }
 
-    case LOGOUT_FAIL:{
-      return{
+    case LOGOUT_FAIL: {
+      return {
         ...state,
         loading: false,
-        error:action.payload
-      }
+        error: action.payload,
+      };
     }
     case CLEAR_ERRORS:
       return {
@@ -71,3 +72,4 @@ export const userReducer = (state = { user: {} }, action) => {
       return state;
   }
 };
+

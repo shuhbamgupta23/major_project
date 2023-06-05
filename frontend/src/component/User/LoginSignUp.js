@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, login, register } from "../../actions/userAction";
 import { useAlert } from "react-alert";
 
-const LoginSignUp = ({ history }) => {
+const LoginSignUp = ({ history, location }) => {
   const { error, loading, isAuthenticated } = useSelector(
     (state) => state.user
   );
@@ -27,7 +27,9 @@ const LoginSignUp = ({ history }) => {
     password: "",
     avatar: "",
   });
-
+  const redirect = location.search
+    ? location.search.split("=")[1]
+    : "/account`";
   const { name, email, password } = user;
 
   const loginSubmit = (e) => {
@@ -45,9 +47,9 @@ const LoginSignUp = ({ history }) => {
       dispatch(clearErrors());
     }
     if (isAuthenticated) {
-      history.push("/account");
+      history.push(redirect);
     }
-  }, [dispatch, error, alert, history, isAuthenticated]);
+  }, [dispatch, error, alert, history, isAuthenticated, redirect]);
 
   const [avatar, setAvatar] = useState("/Profile.png");
   const [avatarPreview, setAvatarPreview] = useState("/Profile.png");

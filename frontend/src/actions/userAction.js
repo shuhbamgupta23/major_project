@@ -16,11 +16,13 @@ import axios from "axios";
 
 export const login = (email, password) => async (dispatch) => {
   try {
+    console.log("first")
     dispatch({ type: LOGIN_REQUEST });
     const config = { headers: { "Content-Type": "application/json" } };
     const { data } = await axios.post(`/login`, { email, password }, config);
     dispatch({ type: LOGIN_SUCCESS, payload: data.user });
   } catch (err) {
+    console.log(err)
     dispatch({ type: LOGIN_FAIL, payload: err.response.data.message });
   }
 };
@@ -53,7 +55,7 @@ export const loadUser = () => async (dispatch) => {
 };
 
 export const logout = () => async (dispatch) => {
-  console.log("Done")
+  console.log("Done");
   try {
     await axios.get("/logout");
 
@@ -62,6 +64,9 @@ export const logout = () => async (dispatch) => {
     dispatch({ type: LOGOUT_FAIL, payload: err.response.data.message });
   }
 };
+
+
+
 
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });

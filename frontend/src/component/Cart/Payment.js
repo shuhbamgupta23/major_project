@@ -47,7 +47,8 @@ const Payment = ({ history }) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
+    localStorage.removeItem('shippingInfo');
+    localStorage.removeItem('cartItems');
     payBtn.current.disabled = true;
 
     try {

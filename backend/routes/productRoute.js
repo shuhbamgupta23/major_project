@@ -22,13 +22,13 @@ productRouter.post(
 );
 productRouter.get("/products", getAllProducts);
 productRouter.put(
-  "admins/product/:id",
+  "/admin/product/:id",
   isAuthenticatedUser,
   authorizeRoles("admin"),
   updateProduct
 );
 productRouter.delete(
-  "admin/product/:id",
+  "/admin/product/:id",
   isAuthenticatedUser,
   authorizeRoles("admin"),
   deleteProduct

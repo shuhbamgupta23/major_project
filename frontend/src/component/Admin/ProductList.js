@@ -44,7 +44,6 @@ const ProductList = ({ history }) => {
 
     if (isDeleted) {
       alert.success("Product Deleted Successfully");
-      history.push("/admin/dashboard");
       dispatch({ type: DELETE_PRODUCT_RESET });
     }
 

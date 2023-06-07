@@ -114,7 +114,7 @@ export const updateProduct = (id, productData) => async (dispatch) => {
     };
 
     const { data } = await axios.put(
-      `/admins/product/${id}`,
+      `/admin/product/${id}`,
       productData,
       config
     );

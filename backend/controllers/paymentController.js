@@ -1,7 +1,8 @@
 import { asyncErrorHandler } from "./../middleware/catchAsynError.js";
-import stripe from "stripe";
-
-stripe(process.env.STRIPE_SECRET_KEY);
+import Stripe from "stripe";
+const stripe = new Stripe(
+  "sk_test_51LePMCSAdKC6NlAlxM8uDVExpdtlvtHurzDYDDqAP8i0MaO3jhRHYp5kGLXSqgIfV3TH2vZRfjcz80aEndJotScg003qbcKYyt"
+);
 
 export const processPayment = asyncErrorHandler(async (req, res, next) => {
   const myPayment = await stripe.paymentIntents.create({

@@ -9,50 +9,47 @@ import { clearErrors, login, register } from "../../actions/userAction";
 import { useAlert } from "react-alert";
 
 const LoginSignUp = ({ history, location }) => {
+  const dispatch = useDispatch();
+  const alert = useAlert();
+
   const { error, loading, isAuthenticated } = useSelector(
     (state) => state.user
   );
-  const alert = useAlert();
-  const dispatch = useDispatch();
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
 
   const loginTab = useRef(null);
   const registerTab = useRef(null);
   const switcherTab = useRef(null);
 
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+
   const [user, setUser] = useState({
     name: "",
     email: "",
     password: "",
-    avatar: "",
   });
-  const redirect = location.search
-    ? location.search.split("=")[1]
-    : "/account`";
+
   const { name, email, password } = user;
+
+  const [avatar, setAvatar] = useState("/Profile.png");
+  const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
 
   const loginSubmit = (e) => {
     e.preventDefault();
     dispatch(login(loginEmail, loginPassword));
   };
+
   const registerSubmit = (e) => {
     e.preventDefault();
-    dispatch(register(user));
+
+    const myForm = new FormData();
+
+    myForm.set("name", name);
+    myForm.set("email", email);
+    myForm.set("password", password);
+    myForm.set("avatar", avatar);
+    dispatch(register(myForm));
   };
-
-  useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-    if (isAuthenticated) {
-      history.push(redirect);
-    }
-  }, [dispatch, error, alert, history, isAuthenticated, redirect]);
-
-  const [avatar, setAvatar] = useState("/Profile.png");
-  const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
 
   const registerDataChange = (e) => {
     if (e.target.name === "avatar") {
@@ -64,12 +61,25 @@ const LoginSignUp = ({ history, location }) => {
           setAvatar(reader.result);
         }
       };
+
       reader.readAsDataURL(e.target.files[0]);
-      user.avatar = reader;
     } else {
       setUser({ ...user, [e.target.name]: e.target.value });
     }
   };
+
+  const redirect = location.search ? location.search.split("=")[1] : "/account";
+
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+
+    if (isAuthenticated) {
+      history.push(redirect);
+    }
+  }, [dispatch, error, alert, history, isAuthenticated, redirect]);
 
   const switchTabs = (e, tab) => {
     if (tab === "login") {
@@ -119,12 +129,12 @@ const LoginSignUp = ({ history, location }) => {
                   <input
                     type="password"
                     placeholder="Password"
+                    required
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
-                  ></input>
+                  />
                 </div>
-
-                <input type="submit" value="login" className="loginBtn" />
+                <input type="submit" value="Login" className="loginBtn" />
               </form>
               <form
                 className="signUpForm"

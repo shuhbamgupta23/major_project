@@ -99,7 +99,7 @@
 
 #registerImage > img {
   width: 3vmax;
-  border-radius: 50%;
+  border-radius: 100%;
 }
 #registerImage > input {
   display: flex;
@@ -131,19 +131,14 @@
   color: white;
   font: 300 0.9vmax "Roboto";
   width: 100%;
-  padding: 1rem 1rem 2rem 1rem;
+  padding: .5rem 1rem 1rem 1rem;
   cursor: pointer;
   transition: all 0.5s;
   border-radius: 4px;
   outline: none;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.219);
 }
-img{
-    max-width: 100%;
-}
-#registerImage > img{
-    border-radius: 100%
-}
+
 .loginBtn:hover,
 .signUpBtn:hover {
   background-color: rgb(179, 66, 46);

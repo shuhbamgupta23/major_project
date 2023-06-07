@@ -43,9 +43,9 @@ export const getSingleOrder = asyncErrorHandler(async (req, res, next) => {
 });
 
 export const myOrders = asyncErrorHandler(async (req, res, next) => {
-  const order = await Order.find({ user: req.user._id });
+  const orders = await Order.find({ user: req.user._id });
 
-  res.status(200).json({ success: true, order });
+  res.status(200).json({ success: true, orders });
 });
 
 export const getAllOrder = asyncErrorHandler(async (req, res, next) => {
@@ -64,10 +64,11 @@ export const updateOrder = asyncErrorHandler(async (req, res, next) => {
   if (order.orderStatus === "Delivered") {
     return next(new ErrorHandler("You have already delivered this order", 404));
   }
-
-  order.orderItems.forEach(async (o) => {
-    await updateStock(o.product, o.quantity);
-  });
+  if (req.body.status === "Shipped") {
+    order.orderItems.forEach(async (o) => {
+      await updateStock(o.product, o.quantity);
+    });
+  }
 
   order.orderStatus = req.body.status;
   if (req.body.status === "Delivered") {

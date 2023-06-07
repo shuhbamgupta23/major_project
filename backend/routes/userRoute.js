@@ -7,6 +7,7 @@ import {
   loginUser,
   logout,
   registerUser,
+  updateProfile,
   updateRole,
 } from "../controllers/userController.js";
 import { isAuthenticatedUser, authorizeRoles } from "../middleware/auth.js";
@@ -45,5 +46,7 @@ userRouter.delete(
   authorizeRoles("admin"),
   deleteUser
 );
+
+userRouter.put("/me/update", isAuthenticatedUser, updateProfile);
 
 export default userRouter;

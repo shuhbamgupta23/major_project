@@ -11,7 +11,7 @@ import {
 
 const orderRouter = express.Router();
 orderRouter.post("/order/new", isAuthenticatedUser, newOrder);
-orderRouter.get("/order/me", isAuthenticatedUser, myOrders);
+orderRouter.get("/orders/me", isAuthenticatedUser, myOrders);
 orderRouter.get("/order/:id", isAuthenticatedUser, getSingleOrder);
 
 orderRouter.get(

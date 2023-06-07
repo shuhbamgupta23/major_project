@@ -11,7 +11,7 @@ import PhoneIcon from "@material-ui/icons/Phone";
 import TransferWithinAStationIcon from "@material-ui/icons/TransferWithinAStation";
 import { Country, State } from "country-state-city";
 import { useAlert } from "react-alert";
-import CheckoutSteps from "./CheckoutSteps.js";
+import CheckoutSteps from "../Cart/CheckoutSteps";
 
 const Shipping = ({ history }) => {
   const dispatch = useDispatch();
@@ -50,7 +50,7 @@ const Shipping = ({ history }) => {
 
           <form
             className="shippingForm"
-            type="submit"
+            encType="multipart/form-data"
             onSubmit={shippingSubmit}
           >
             <div>
@@ -136,9 +136,12 @@ const Shipping = ({ history }) => {
               </div>
             )}
 
-            <button type="submit" value="Continue" className="shippingBtn">
-              Continue
-            </button>
+            <input
+              type="submit"
+              value="Continue"
+              className="shippingBtn"
+              disabled={state ? false : true}
+            />
           </form>
         </div>
       </div>

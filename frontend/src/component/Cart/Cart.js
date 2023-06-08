@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import "./Cart.css";
 import CartItemCard from "./CartItemCard";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 const Cart = ({ history }) => {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
-
   const increaseQuantity = (id, quantity, stock) => {
     const newQty = quantity + 1;
     if (stock <= quantity) {

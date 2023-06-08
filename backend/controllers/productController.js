@@ -35,18 +35,17 @@ export const createProduct = asyncErrorHandler(async (req, res, next) => {
 
 //get All products
 export const getAllProducts = asyncErrorHandler(async (req, res, next) => {
-  const resultPerPage = 8;
+
   const productsCount = await Product.countDocuments();
 
   const apiFeatures = new ApiFeatures(Product.find(), req.query)
     .search()
     .filter()
-    .pagination(resultPerPage);
   const products = await apiFeatures.query;
 
   res
     .status(200)
-    .json({ success: true, products, productsCount, resultPerPage });
+    .json({ success: true, products, productsCount });
 });
 
 //update Product -- Admin
@@ -169,21 +168,21 @@ export const getProductReviews = asyncErrorHandler(async (req, res, next) => {
 });
 
 export const deleteReview = asyncErrorHandler(async (req, res, next) => {
-  const product = await Product.findById(req.query.productId);
+  let product = await Product.findById(req.query.productId);
   if (!product) {
     return next(new ErrorHandler("Product not found", 500));
   }
-  console.log(product);
-  console.log(req.query.id);
+  // console.log(product);
   const reviews = product.reviews.filter(
     (rev) => rev._id.toString() !== req.query.id.toString()
-  );
+    );
+    console.log(req.query.id);
 
   let avg = 0;
   reviews.forEach((rev) => (avg += rev.rating));
 
-  const ratings = 0;
-  const numOfReviews = 0;
+  let ratings = 0;
+  let numOfReviews = 0;
   if (reviews.length > 0) {
     ratings = avg / reviews.length;
     numOfReviews = reviews.length;

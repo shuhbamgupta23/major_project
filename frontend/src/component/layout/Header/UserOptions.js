@@ -58,6 +58,9 @@ const UserOptions = ({ user }) => {
   }
   function logoutUser() {
     dispatch(logout());
+    localStorage.removeItem("cartItems");
+    localStorage.removeItem("shippingInfo");
+    sessionStorage.removeItem("orderInfo");
     alert.success("Logout Successfully");
   }
 

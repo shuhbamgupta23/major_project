@@ -67,7 +67,6 @@ const Products = ({ match }) => {
     ratings,
     alert,
     error,
-    products,
   ]);
 
   return (

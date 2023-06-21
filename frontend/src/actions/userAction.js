@@ -43,13 +43,12 @@ export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_REQUEST });
 
-    const config = { headers: { "Content-Type": "application/json" } };
+    const config = {
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    };
 
-    const { data } = await axios.post(
-      `/login`,
-      { email, password },
-      config
-    );
+    const { data } = await axios.post(`/login`, { email, password }, config);
 
     dispatch({ type: LOGIN_SUCCESS, payload: data.user });
   } catch (error) {
@@ -124,11 +123,7 @@ export const updatePassword = (passwords) => async (dispatch) => {
 
     const config = { headers: { "Content-Type": "application/json" } };
 
-    const { data } = await axios.put(
-      `/password/update`,
-      passwords,
-      config
-    );
+    const { data } = await axios.put(`/password/update`, passwords, config);
 
     dispatch({ type: UPDATE_PASSWORD_SUCCESS, payload: data.success });
   } catch (error) {
@@ -210,11 +205,7 @@ export const updateUser = (id, userData) => async (dispatch) => {
 
     const config = { headers: { "Content-Type": "application/json" } };
 
-    const { data } = await axios.put(
-      `/admin/user/${id}`,
-      userData,
-      config
-    );
+    const { data } = await axios.put(`/admin/user/${id}`, userData, config);
 
     dispatch({ type: UPDATE_USER_SUCCESS, payload: data.success });
   } catch (error) {

@@ -51,6 +51,7 @@ const NewProduct = ({ history }) => {
   }, [dispatch, alert, error, history, success]);
 
   const createProductSubmitHandler = (e) => {
+    console.log("Hello")
     e.preventDefault();
 
     const myForm = new FormData();

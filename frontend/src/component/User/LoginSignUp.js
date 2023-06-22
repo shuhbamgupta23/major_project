@@ -7,7 +7,7 @@ import FaceIcon from "@material-ui/icons/Face";
 import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, login, register } from "../../actions/userAction";
 import { useAlert } from "react-alert";
-
+import User from "./user.png";
 const LoginSignUp = ({ history, location }) => {
   const dispatch = useDispatch();
   const alert = useAlert();
@@ -32,8 +32,8 @@ const LoginSignUp = ({ history, location }) => {
   const { name, email, password } = user;
 
   const [avatar, setAvatar] = useState("/Profile.png");
-  const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
-  console.log(avatar)
+  const [avatarPreview, setAvatarPreview] = useState(`${User}`);
+
   const loginSubmit = (e) => {
     e.preventDefault();
     dispatch(login(loginEmail, loginPassword));

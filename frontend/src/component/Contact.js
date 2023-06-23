@@ -1,5 +1,4 @@
 import React from "react";
-import linkedin from "./linkedin.png";
 const Contact = () => {
   return (
     <div

@@ -37,6 +37,8 @@ import UsersList from "./component/Admin/UsersList";
 import UpdateUser from "./component/Admin/UpdateUser";
 import ProductReviews from "./component/Admin/ProductReviews";
 import NotFound from "./component/layout/Not Found/NotFound";
+import Contact from "./component/Contact";
+import About from "./component/About";
 
 
 function App() {
@@ -83,6 +85,8 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route exact path="/product/:id" component={ProductDetails} />
         <Route exact path="/products" component={Products} />
+        <Route exact path="/contact" component={Contact} />
+        <Route exact path="/about" component={About} />
         <Route path="/products/:keyword" component={Products} />
 
         <Route exact path="/search" component={Search} />
